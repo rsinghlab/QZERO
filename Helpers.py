@@ -4,49 +4,30 @@ from tqdm import tqdm
 import re
 import pandas as pd
 import ast
-
 from beir import util, LoggingHandler
 from beir.retrieval import models
 from beir.datasets.data_loader import GenericDataLoader
 import os
-
 from beir import util, LoggingHandler
 from beir.retrieval import models
 from beir.datasets.data_loader import GenericDataLoader
 from beir.retrieval.evaluation import EvaluateRetrieval
 from beir.retrieval.search.dense import PQFaissSearch, HNSWFaissSearch, FlatIPFaissSearch, HNSWSQFaissSearch 
 import spacy   
-
 import logging
 import pathlib, os
 import random
 from collections import Counter
-
 from typing import Dict, Tuple
 from tqdm.autonotebook import tqdm
 import json
 import os
-import logging
 import csv
-import ast
-
-import pandas as pd
-from collections import Counter
-import ast
 from medcat.cat import CAT
-
-
-logger = logging.getLogger(__name__)
-
-
 from time import time
 
 
-import logging
-import pathlib, os
-import random
-import pandas as pd
-
+logger = logging.getLogger(__name__)
 
 class GenericDataLoader:
 
@@ -264,19 +245,18 @@ def select_N_merge(results,n_categories, tests):
     
     filtered_df = tests.copy()
 
-        # Filter out rows where '_id' values are present in 'missing_ids' list
+    # Filter out rows where '_id' values are present in 'missing_ids' list
     filtered_df = filtered_df[~filtered_df['qid'].isin(missing_ids)]
-        #reset index of filtered_df
+    #reset index of filtered_df
     filtered_df = filtered_df.reset_index(drop=True)
 
     filtered_df['qid'] = filtered_df['qid'].astype(int)
 
-
-        # Merge both DataFrames on 'qid' while maintaining the ordering
+    # Merge both DataFrames on 'qid' while maintaining the ordering
     merged_df = pd.merge_ordered(news_grouped, filtered_df, on='qid',how='inner')
     merged_df = merged_df.reset_index(drop=True)
 
-        # Apply the function to the DataFrame column
+    # Apply the function to the DataFrame column
     merged_df['sentence'] = merged_df['categories'].apply(list_to_sentence)
 
     return merged_df
