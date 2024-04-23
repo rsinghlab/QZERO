@@ -14,11 +14,7 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 # Set a fixed value for the hash seed
 os.environ["PYTHONHASHSEED"] = str(seed)
-
-import pandas as pd
-import torch
 from sentence_transformers import SentenceTransformer, util
-
 import pandas as pd
 from gensim.models import KeyedVectors
 from collections import defaultdict
@@ -35,21 +31,10 @@ from collections import defaultdict
 from numpy.linalg import norm
 from gensim.models import KeyedVectors
 from gensim.models.fasttext import load_facebook_vectors
-from sentence_transformers import SentenceTransformer
-
-import pandas as pd
 from transformers import GPT2Tokenizer
 import openai
-import pandas as pd
-import numpy as np
 import re
 from tqdm import tqdm
-
-# Setup OpenAI client
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
-from transformers import GPT2Tokenizer
 
 def load_models(model_name):
     # Load specific model based on the user input
@@ -72,7 +57,7 @@ def load_models(model_name):
 
     elif model_name == 'sbert':
         print("Loading sbert")
-        sbert_model = SentenceTransformer('all-mpnet-base-v2', device='mps')
+        sbert_model = SentenceTransformer('all-mpnet-base-v2', device='cuda')
         sbert_model.max_seq_length = 500
         return sbert_model
 
