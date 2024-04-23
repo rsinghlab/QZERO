@@ -9,7 +9,7 @@ def main():
     parser.add_argument('--model_type', type=str, default='sbert', 
                         choices=['glove', 'word2vec', 'fasttext', 'sbert', 'gpt-small', 'gpt_large'], 
                         help='Select the type of the model to use')
-    parser.add_argument('--data_file', type=str, default='QZERO_PAPER/retrieved_results/results_bm25.csv', 
+    parser.add_argument('--data_file', type=str, default='retrieved_results/results_bm25.csv', 
                         help='File path for the dataset to evaluate')
     parser.add_argument('--category_dict', type=str, default='ag_classes',
                         choices=['tag_classes', 'ag_classes', 'dbpedia_classes', 'yahoo_classes', 'cooking_classes', 'ohsumed_classes'],
