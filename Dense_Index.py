@@ -12,7 +12,6 @@ import random
 import re
 import nltk
 from nltk.corpus import stopwords
-# from Dense_Indexer import GenericDataLoader
 import Helpers
 from Helpers import GenericDataLoader
 import string
@@ -22,8 +21,6 @@ from gensim.utils import simple_preprocess
 import ast
 import argparse
 from tqdm import tqdm
-import Helpers  # Ensure this module is correctly imported
-import re
 
 # Setting up logging
 logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
@@ -74,8 +71,6 @@ def process_file(file_path, data):
     if title:
         data.append({'title': title, 'categories': categories, 'content': content})
 
-
-
 def preprocess_dataframe(df):
     df = df.drop_duplicates(subset=['title', 'categories', 'content'])
     df = df[df['categories'].str.len() > 0]
@@ -110,7 +105,7 @@ def preprocess_data(folder_path):
     print("Done Creating wiki json files")
     return output_file
 
-# Load and preprocess data
+# Load and preprocess wiki dataframe
 def preprocess_dataX(filepath):
     stop_words = set(stopwords.words('english'))
     data = pd.read_csv(filepath).head(300)
@@ -154,42 +149,6 @@ def preprocess_test_df(file_path):
 # Dense Retrieval using Different Faiss Indexes (Flat or ANN) ####
     # Provide any Sentence-Transformer or Dense Retriever model.
 
-def evaluate_retrieval(model_path, corpus, queries, index_dir, prefix="my-index", ext="flat", top_k=10):
-
-    model = models.SentenceBERT(model_path)
-
-    faiss_search = FlatIPFaissSearch(model,batch_size=128)
-  
-    model = models.SentenceBERT(model_path)
-    # Initialize the FAISS search (using FlatIP index in this example).
-    faiss_search = FlatIPFaissSearch(model, batch_size=128)
-    
-    if os.path.exists(os.path.join(index_dir, "{}.{}.faiss".format(prefix, ext))): 
-        faiss_search.load(input_dir=index_dir, prefix=prefix, ext=ext)
-        print("loading indexx")
-
-    # Create the output directory if it doesn't exist
-    os.makedirs(index_dir, exist_ok=True)
-
-    # Construct the full index file path
-    index_file = os.path.join(index_dir, "{}.{}.faiss".format(prefix, ext))
-
-    # Only save the index if the file doesn't already exist
-    if not os.path.exists(index_file):
-        faiss_search.save(output_dir=index_dir, prefix=prefix, ext=ext)
-        print('saving index')
-    else:
-        print("Index already exists, skipping saving.")  # Optional message
-
-        
-    # Set up the retrieval evaluation, including the scoring function and the list of k values to evaluate.
-    retriever = EvaluateRetrieval(faiss_search, score_function="dot",k_values=[top_k]) # or "cos_sim"/"dot"
-    results = retriever.retrieve(corpus, queries)
-
-    logging.info("Retriever evaluation for k in: {}".format(retriever.k_values))
-    return results
-
-    
 def evaluate_retrieval(model_path, corpus, queries, index_dir, prefix="my-index", ext="flat", top_k=10):
 
     # Initialize the SentenceBERT model from BEIR.
@@ -250,24 +209,22 @@ def store_results(results, corpus, top_k):
 
 def main():
     parser = argparse.ArgumentParser(description='Run information retrieval processes with Dense retriever')
-    parser.add_argument('--wiki_data_path', type=str, default='/Users/tabdull1/Python_Projects/RAZL_Projects/QZERO_PAPER/wiki_dumps.csv', help='Path to the Wikipedia data file')
-    parser.add_argument('--query_path', type=str, default='/Users/tabdull1/Python_Projects/RAZL_Projects/QZERO_PAPER/input_data/ag_test.csv', help='Path to the query file')
+    parser.add_argument('--wiki_data_path', type=str, default='wiki', help='Path to the Wikipedia data files')
+    parser.add_argument('--query_path', type=str, default='input_data/ag_test.csv', help='Path to the query file')
     parser.add_argument('--model_path', type=str, default='facebook/contriever', help='Model path for retrieval')
-    parser.add_argument('--index_dir', type=str, default='/Users/tabdull1/Python_Projects/RAZL_projects/QZERO_PAPER/faiss-index-wiki2', help='Directory for storing FAISS index')
+    parser.add_argument('--index_dir', type=str, default='faiss-index-wiki', help='Directory for storing FAISS index')
     parser.add_argument('--noun_type', type=str, default='spacy', choices=['proper', 'spacy', 'medical'], help='Type of noun extraction to perform')
-    parser.add_argument('--result_file', type=str, default='/Users/tabdull1/Python_Projects/RAZL_Projects/QZERO_PAPER/retrieved_results/results_dpr2.csv', help='Filename to store the final results')
-    parser.add_argument('--top_k', type=int, default=10, help='Top K results to retrieve')
+    parser.add_argument('--result_file', type=str, default='retrieved_results/results_dpr.csv', help='Filename to store the final results')
+    parser.add_argument('--top_k', type=int, default=50, help='Top K results to retrieve')
 
     args = parser.parse_args()
 
     # Data preprocessing
-    # corpus_file = preprocess_data(args.wiki_data_path)
-    corpus_file = preprocess_dataX(args.wiki_data_path)
+    corpus_file = preprocess_data(args.wiki_data_path)
     query_file = preprocess_queries_and_save(args.query_path)
     print("Loaded queries")
-    corpus_file = "/Users/tabdull1/Python_Projects/RAZL_projects/QZERO_PAPER/Wiki_corpusXX.jsonl"
-    # Load data
-    data_loader = GenericDataLoader(data_folder='/Users/tabdull1/Python_Projects/RAZL_Projects/QZERO_PAPER/', corpus_file=corpus_file, query_file=query_file)
+    
+    data_loader = GenericDataLoader(data_folder='/path/to/project/jsonfiles/QZERO', corpus_file=corpus_file, query_file=query_file)
     corpus, queries, qrels = data_loader.load_custom()
     print("Done loading files")
     print(args.index_dir)
