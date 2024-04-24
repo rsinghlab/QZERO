@@ -48,8 +48,6 @@ def preprocess_dataframe(df):
     df = df[df['categories'].str.len() > 0]
     df = df[df['content'].apply(lambda x: len(x.split()) >= 20)]
     df.reset_index(drop=True, inplace=True)
-    #save wiki_data in a dataframe
-    # df.to_csv("QZERO_PAPER/processed_wiki.csv",index=False)
     return df
 
 def prepare_wiki_data(folder_path):
@@ -100,7 +98,7 @@ def tokenize(doc):
         return ' '.join(tokenized)
     
 def preprocess_queries(file_path):
-    query_df = pd.read_csv(file_path).head(100)
+    query_df = pd.read_csv(file_path)
     query_df['text'] = query_df['text'].apply(tokenize)
     query_df['tokenized'] = query_df['text'].apply(process_text)
     query_df = query_df[query_df['tokenized'].str.split().str.len() >= 1].reset_index(drop=True)
@@ -110,7 +108,7 @@ def preprocess_queries(file_path):
     return query
 
 def preprocess_test_df(file_path):
-    query_df = pd.read_csv(file_path).head(100)
+    query_df = pd.read_csv(file_path)
     query_df['text'] = query_df['text'].apply(tokenize)
     query_df['tokenized'] = query_df['text'].apply(process_text)
     query_df = query_df[query_df['tokenized'].str.split().str.len() >= 1].reset_index(drop=True)
@@ -126,66 +124,12 @@ def retrieve_and_save(index,query_df,top_k):
     print("Done")
     return bm25_news
 
-"""
-def main():
-    index_dir = "/Users/tabdull1/Python_Projects/RAZL_projects/QZERO_PAPER/Sparse_wiki_indexer"
-
-    wiki_folder_path ="QZERO_PAPER/wiki"
-
-    # Check if index already exists
-    if not os.path.exists(index_dir) or not os.listdir(index_dir):
-        print("No existing index found, preparing data and building index...")
-        df = prepare_wiki_data(wiki_folder_path)
-        print(df)
-        index =  build_index(df, index_dir)
-    else:
-        if not pt.started():
-            pt.init(mem=20000)
-        print("Loading ... Index already exists.")
-        index = pt.IndexFactory.of(index_dir)
-        print(index.getCollectionStatistics().toString())
-
-    query_folder = "QZERO_PAPER/input_data/ag_test.csv"
-    queries = preprocess_queries(query_folder)
-
-    #batch retrieve
-    output_dir = "QZERO_PAPER/retrieved_results/results_bm252.csv"
-    results =retrieve_and_save(index=index, query_df=queries,top_k=10)
-    results.to_csv(output_dir,index=False)
-    print("Retrieval process completed and results saved.")
-
-    #prepare reformed queries classification dataframe
-    test_df= preprocess_test_df(query_folder)
-
-    results = Helpers.handle_incomplete_patterns(results)
-    n_categories=50
-    merged_results = Helpers.select_N_merge(results,n_categories=n_categories, tests=test_df)
-
-        # Category noun type to be user choice
-    print("Using spacy_noun type for keyword extraction")
-    noun_type = 'spacy'  # Options: 'proper', 'spacy', 'medical'
-    if  noun_type == 'proper':
-        merged_results["top_nouns"] = merged_results["sentence"].apply(lambda x: Helpers.extract_proper_nouns(x))
-    elif  noun_type == 'spacy':
-        merged_results["top_nouns"] = merged_results["sentence"].progress_apply(lambda x: Helpers.extract_spacy_nouns(x))
-    elif  noun_type == 'medical':
-        medcat_path = 'umls_sm_pt2ch_533bab5115c6c2d6.zip'
-        merged_results = Helpers.get_med_nouns(merged_results, 'categories', medcat_path)
-
-    merged_results.to_csv(output_dir,index=False)
-    print("Queries reformulated, saved and ready for classification.")
-
-
-if __name__ == '__main__':
-    main()
-"""
-
 def main():
     parser = argparse.ArgumentParser(description='Run information retrieval processes with Sparse retriever.')
-    parser.add_argument('--index_dir', type=str, default='/Users/tabdull1/Python_Projects/RAZL_projects/QZERO_PAPER/Sparse_wiki_indexer')
-    parser.add_argument('--wiki_folder_path', type=str, default='/Users/tabdull1/Python_Projects/RAZL_projects/QZERO_PAPER/wiki')
-    parser.add_argument('--query_folder', type=str, default='/Users/tabdull1/Python_Projects/RAZL_projects/QZERO_PAPER/input_data/ag_test.csv')
-    parser.add_argument('--output_dir', type=str, default='/Users/tabdull1/Python_Projects/RAZL_projects/QZERO_PAPER/retrieved_results/results_bm25.csv')
+    parser.add_argument('--index_dir', type=str, default='Sparse_wiki_index')
+    parser.add_argument('--wiki_folder_path', type=str, default='wiki')
+    parser.add_argument('--query_folder', type=str, default='input_data/ag_test.csv')
+    parser.add_argument('--output_dir', type=str, default='retrieved_results/results_bm25.csv')
     parser.add_argument('--noun_type', type=str, default='spacy', choices=['proper', 'spacy', 'medical'])
 
     args = parser.parse_args()
