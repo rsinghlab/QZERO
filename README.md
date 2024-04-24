@@ -19,7 +19,7 @@ To install requirements:
 pip install -r requirements.txt
 ```
 #Datasets
-Knowledge Corpus: Wikipedia dumps version: enwiki-20230820-pages-articles-multistream.xml.bz2
+Knowledge Corpus stored in wiki folder: Wikipedia dumps version: enwiki-20230820-pages-articles-multistream.xml.bz2
 
 Test data: We provide some test datasets in the input data folder, but they can be accessed via the following links
 1. [Ag_news](https://huggingface.co/datasets/ag_news)
@@ -44,5 +44,5 @@ python3 Dense_Index.py /path/to/save/index /path/to/wiki/data /path/to/test/quer
 ```build dense index
 python3 Evaluate_QZero.py '/embedding_model_name/ /path/to/reformulated/query/ /dataset_labels/
 ```
-
+Sample batch scripts to run the code are stored in the scripts folder.
  
