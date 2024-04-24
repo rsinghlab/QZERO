@@ -131,6 +131,8 @@ def main():
     parser.add_argument('--query_folder', type=str, default='input_data/ag_test.csv')
     parser.add_argument('--output_dir', type=str, default='retrieved_results/results_bm25.csv')
     parser.add_argument('--noun_type', type=str, default='spacy', choices=['proper', 'spacy', 'medical'])
+    parser.add_argument('--top_k', type=int, default=50, help='Top K results to retrieve')
+
 
     args = parser.parse_args()
 
@@ -139,7 +141,6 @@ def main():
         pt.init(mem=20000)
     index_dir = args.index_dir
     wiki_path = args.wiki_folder_path
-    print(index_dir)
     # Check if index already exists
     if not os.path.exists(index_dir) or not os.listdir(index_dir):
         print("No existing index found, preparing data and building index...")
@@ -152,7 +153,7 @@ def main():
         print(index.getCollectionStatistics().toString())
 
     queries = preprocess_queries(args.query_folder)
-    results = retrieve_and_save(index=index, query_df=queries, top_k=10)
+    results = retrieve_and_save(index=index, query_df=queries, top_k=args.top_k)
     results.to_csv(args.output_dir, index=False)
     print("Retrieval process completed and results saved.")
 
