@@ -209,27 +209,27 @@ def store_results(results, corpus, top_k):
 
 def main():
     parser = argparse.ArgumentParser(description='Run information retrieval processes with Dense retriever')
+    parser.add_argument('--index_dir', type=str, default='faiss-index-wiki', help='Directory for storing FAISS index')
     parser.add_argument('--wiki_data_path', type=str, default='wiki', help='Path to the Wikipedia data files')
     parser.add_argument('--query_path', type=str, default='input_data/ag_test.csv', help='Path to the query file')
-    parser.add_argument('--model_path', type=str, default='facebook/contriever', help='Model path for retrieval')
-    parser.add_argument('--index_dir', type=str, default='faiss-index-wiki', help='Directory for storing FAISS index')
-    parser.add_argument('--noun_type', type=str, default='spacy', choices=['proper', 'spacy', 'medical'], help='Type of noun extraction to perform')
     parser.add_argument('--result_file', type=str, default='retrieved_results/results_dpr.csv', help='Filename to store the final results')
+    parser.add_argument('--noun_type', type=str, default='spacy', choices=['proper', 'spacy', 'medical'], help='Type of noun extraction to perform')
     parser.add_argument('--top_k', type=int, default=50, help='Top K results to retrieve')
-
+    
     args = parser.parse_args()
 
     # Data preprocessing
     corpus_file = preprocess_data(args.wiki_data_path)
     query_file = preprocess_queries_and_save(args.query_path)
     print("Loaded queries")
-    
+
     data_loader = GenericDataLoader(data_folder='/path/to/project/jsonfiles/created', corpus_file=corpus_file, query_file=query_file)
     corpus, queries, qrels = data_loader.load_custom()
     print("Done loading files")
-    print(args.index_dir)
+    
     # Perform indexing and retrieval
-    ret_results = evaluate_retrieval(args.model_path, corpus, queries, index_dir=args.index_dir, top_k=args.top_k)
+    model_path = 'facebook/contriever'
+    ret_results = evaluate_retrieval(model_path, corpus, queries, index_dir=args.index_dir, top_k=args.top_k)
     results = store_results(ret_results, corpus, args.top_k)
     print("Retrieval process completed and results saved.")
 
