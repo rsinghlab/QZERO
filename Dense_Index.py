@@ -100,7 +100,7 @@ def preprocess_data(folder_path):
     data['_id'] = data.index.to_series().apply(lambda x: str(x + 1))
     data = data[['_id', 'title', 'text', 'categories']]
     data.columns=["_id","title","text","metadata"]
-    output_file = "/Users/tabdull1/Python_Projects/RAZL_Projects/QZERO_PAPER/Wiki_corpus.jsonl"
+    output_file = "Wiki_corpus.jsonl"
     data.to_json(output_file, orient="records", lines=True)
     print("Done Creating wiki json files")
     return output_file
@@ -116,25 +116,25 @@ def preprocess_dataX(filepath):
     data['_id'] = data.index.to_series().apply(lambda x: str(x + 1))
     data = data[['_id', 'title', 'text', 'categories']]
     data.columns=["_id","title","text","metadata"]
-    output_file = "/Users/tabdull1/Python_Projects/RAZL_Projects/QZERO_PAPER/Wiki_corpus.jsonl"
+    output_file = "Wiki_corpus.jsonl"
     data.to_json(output_file, orient="records", lines=True)
     print("Done Creating wiki json files")
     return output_file
 
 
 def preprocess_queries_and_save(file_path):
-    query_df = pd.read_csv(file_path).head(100)
+    query_df = pd.read_csv(file_path)
     query_df['text'] = query_df['text'].apply(tokenize)
     query_df['processed'] = query_df['text'].apply(process_text)
     query_df = query_df[query_df['processed'].str.split().str.len() >= 1].reset_index(drop=True)
     query_df['_id'] = [str(i) for i in range(1, len(query_df) + 1)]
     queries_dict = query_df[["_id", "processed"]].rename(columns={'processed': 'text'})
-    output_file = "/Users/tabdull1/Python_Projects/RAZL_Projects/QZERO_PAPER/Wiki_queries.jsonl"
+    output_file = "Wiki_queries.jsonl"
     queries_dict.to_json(output_file, orient="records", lines=True)
     return output_file
 
 def preprocess_test_df(file_path):
-    query_df = pd.read_csv(file_path).head(100)
+    query_df = pd.read_csv(file_path)
     query_df['text'] = query_df['text'].apply(tokenize)
     query_df['tokenized'] = query_df['text'].apply(process_text)
     query_df = query_df[query_df['tokenized'].str.split().str.len() >= 1].reset_index(drop=True)
@@ -149,7 +149,7 @@ def preprocess_test_df(file_path):
 # Dense Retrieval using Different Faiss Indexes (Flat or ANN) ####
     # Provide any Sentence-Transformer or Dense Retriever model.
 
-def evaluate_retrieval(model_path, corpus, queries, index_dir, prefix="my-index", ext="flat", top_k=10):
+def evaluate_retrieval(model_path, corpus, queries, index_dir, prefix="my-index", ext="flat", top_k=50):
 
     # Initialize the SentenceBERT model from BEIR.
 
@@ -224,7 +224,7 @@ def main():
     query_file = preprocess_queries_and_save(args.query_path)
     print("Loaded queries")
     
-    data_loader = GenericDataLoader(data_folder='/path/to/project/jsonfiles/QZERO', corpus_file=corpus_file, query_file=query_file)
+    data_loader = GenericDataLoader(data_folder='/path/to/project/jsonfiles/created', corpus_file=corpus_file, query_file=query_file)
     corpus, queries, qrels = data_loader.load_custom()
     print("Done loading files")
     print(args.index_dir)
