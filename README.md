@@ -31,7 +31,7 @@ Test data: We provide some test datasets in the input data folder, but they can 
 
 To reproduce our results, you can access the reformulated queries for all datasets via: [Reformulated queries]()
 
-## To build the Sparse and Dense Index:
+## To Build the Index and Reformulate Queries:
 ```build sparse index
 python3 Sparse_Index.py /path/to/save/index /path/to/wiki/data /path/to/test/query /path/to/save/reformulated/query /keyword_extraction_method/ /top_K/
 ```
