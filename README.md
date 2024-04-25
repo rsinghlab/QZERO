@@ -30,6 +30,7 @@ Test data: We provide some test datasets in the input data folder, but they can 
 6. [TagMyNews](https://github.com/AIRobotZhang/STCKA/tree/master)
 
 To reproduce our results, you can access the reformulated queries for all datasets via: [Reformulated queries]()
+The link to the reformulated queries will be provided after publication.
 
 ## To Build the Index and Reformulate Queries:
 ```build sparse index
