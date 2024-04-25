@@ -8,7 +8,7 @@ We introduce QZero, a novel training-free approach that reformulates queries by 
 
 ## Requirements
 
-Python 3.9.0,
+Python 3.9.9,
 Pyterrier,
 BEIR,
 MedCAT,
