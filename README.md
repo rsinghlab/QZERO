@@ -41,8 +41,14 @@ python3 Dense_Index.py /path/to/save/index /path/to/wiki/data /path/to/test/quer
 ```
 
 ## To Evaluate QZero
+Models we used are: Word2Vec, GloVe, Fasttext, all-mpnet-base-v2, text-embedding-3-small, text-embedding-3-large.
+Download static word embedding models to the QZERO directory.
+update OPEN AI API KEY in the Models.py
+
 ```build dense index
 python3 Evaluate_QZero.py '/embedding_model_name/ /path/to/reformulated/query/ /dataset_labels/
 ```
-Sample batch scripts to run the code are stored in the scripts folder.
+Note: All the scripts use default paths and settings. You can override these defaults by providing your own paths or settings when running the script.
+For detailed information on the arguments and their expected values, use the --help flag.
+
  
