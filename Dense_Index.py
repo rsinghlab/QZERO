@@ -223,7 +223,7 @@ def main():
     query_file = preprocess_queries_and_save(args.query_path)
     print("Loaded queries")
 
-    data_loader = GenericDataLoader(data_folder='/path/to/project/jsonfiles/created', corpus_file=corpus_file, query_file=query_file)
+    data_loader = GenericDataLoader(data_folder='QZERO/', corpus_file=corpus_file, query_file=query_file)
     corpus, queries, qrels = data_loader.load_custom()
     print("Done loading files")
     
