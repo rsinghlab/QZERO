@@ -18,7 +18,7 @@ To install requirements:
 ```setup
 pip install -r requirements.txt
 ```
-#Datasets
+# Datasets
 Knowledge Corpus stored in wiki folder: Wikipedia dumps version: enwiki-20230820-pages-articles-multistream.xml.bz2
 
 Test data: We provide some test datasets in the input data folder, but they can be accessed via the following links
