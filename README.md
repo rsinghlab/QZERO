@@ -46,7 +46,7 @@ Download static word embedding models to the QZERO directory.
 update OPEN AI API KEY in the Models.py
 
 ```build dense index
-python3 Evaluate_QZero.py '/embedding_model_name/ /path/to/reformulated/query/ /dataset_labels/
+python3 Evaluate_QZero.py /embedding_model_name/ /path/to/reformulated/query/ /dataset_labels/
 ```
 Note: All the scripts use default paths and settings. You can override these defaults by providing your own paths or settings when running the script.
 For detailed information on the arguments and their expected values, use the --help flag.
