@@ -21,6 +21,10 @@ pip install -r requirements.txt
 # Datasets
 Knowledge Corpus stored in wiki folder: Wikipedia dumps version: enwiki-20230820-pages-articles-multistream.xml.bz2
 
+Download the full wikidumps form [wikimedia](https://dumps.wikimedia.org/)
+
+Access the exact wiki files we used via this [link](https://drive.google.com/drive/folders/1hwUhcqI0I8k9x5t15XbIaWMKhm7d6NV3)
+
 Test data: We provide some test datasets in the input data folder, but they can be accessed via the following links
 1. [Ag_news](https://huggingface.co/datasets/ag_news)
 2. [DBpedia](https://huggingface.co/datasets/fancyzhx/dbpedia_14)
