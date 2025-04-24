@@ -1,4 +1,4 @@
-# Retrieval Augmented Zero-Shot Text Classification (QZero)
+# [Retrieval Augmented Zero-Shot Text Classification (QZero)](https://arxiv.org/pdf/2406.15241)
 ## Description
 
 We introduce QZero, a novel training-free approach that reformulates queries by retrieving supporting categories from Wikipedia to improve zero-shot classification performance. Our experiments across six diverse datasets demonstrate that QZero enhances performance for state-of-the-art static and contextual embedding models without the need for retraining. Notably, in News and medical topic classification tasks, QZero improves the performance of even the largest OpenAI embedding model by at least 5% and 3%, respectively. Acting as a knowledge amplifier, QZero enables small word embedding models to achieve performance levels comparable to those of larger contextual models, leading to significant computational savings. Additionally, QZero offers meaningful insights that illuminate query context and verify topic relevance, aiding in understanding model predictions. Overall, QZero improves embedding-based zero-shot classifiers while maintaining their simplicity. This makes it particularly valuable for resource-constrained environments and domains with constantly evolving information. The figure below describes the entire Zero-shot classification process:
@@ -57,4 +57,11 @@ python3 Evaluate_QZero.py /embedding_model_name/ /path/to/reformulated/query/ /d
 Note: All the scripts use default paths and settings. You can override these defaults by providing your own paths or settings when running the script.
 For detailed information on the arguments and their expected values, use the --help flag.
 
- 
+## **If you find QZero useful in your work, please cite us!**
+
+<pre> ```bibtex @inproceedings{abdullahi2024retrieval, 
+ title={Retrieval augmented zero-shot text classification}, 
+ author={Abdullahi, Tassallah and Singh, Ritambhara and Eickhoff, Carsten}, 
+ booktitle={Proceedings of the 2024 ACM SIGIR international conference on theory of information retrieval}, 
+ pages={195--203}, 
+ year={2024} } ``` </pre>
